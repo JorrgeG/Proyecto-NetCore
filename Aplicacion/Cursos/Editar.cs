@@ -1,21 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Dominio;
 using MediatR;
 using Persistencia;
 
 namespace Aplicacion.Cursos
 {
-    public class Nuevo
+    public class Editar
     {
         public class Ejecuta : IRequest
         {
+            public int CursoId { get; set; }
             public string Titulo { get; set; }
             public string Descripcion { get; set; }
-            public DateTime FechaPublicacion { get; set; }
+            public DateTime? FechaPublicacion { get; set; }
         }
+
         public class Manejador : IRequestHandler<Ejecuta>
         {
             private readonly CursoOnlineContext _context;
@@ -25,21 +25,22 @@ namespace Aplicacion.Cursos
             }
             public async Task<Unit> Handle(Ejecuta request, CancellationToken cancellationToken)
             {
-                var curso = new Curso
+                var curso = await _context.Curso.FindAsync(request.CursoId);
+                if (curso == null)
                 {
-                    Titulo = request.Titulo,
-                    Descripcion = request.Descripcion,
-                    FechaPublicacion = request.FechaPublicacion
-                };
-                _context.Curso.Add(curso);
-                var valor = await _context.SaveChangesAsync();
-                if (valor > 0)
+                    throw new Exception("El curso no exite");
+                }
+                curso.Titulo = request.Titulo ?? curso.Titulo;
+                curso.Descripcion = request.Descripcion ?? curso.Descripcion;
+                curso.FechaPublicacion = request.FechaPublicacion ?? curso.FechaPublicacion;
+
+                var result = await _context.SaveChangesAsync();
+                if (result > 0)
                 {
                     return Unit.Value;
                 }
-                throw new Exception("No se pudo insertar el curso");
+                throw new Exception("No se guardaron los cambios");
             }
         }
-
     }
 }
