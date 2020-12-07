@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dominio;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,9 +25,10 @@ namespace WebAPI
                 var services = ambiente.ServiceProvider;
                 try
                 {
+                    var userManager = services.GetRequiredService<UserManager<Usuario>>();
                     var contex = services.GetRequiredService<CursoOnlineContext>();
                     contex.Database.Migrate();
-
+                    DataPrueba.InsertarData(contex, userManager).Wait();
                 }
                 catch (System.Exception e)
                 {
