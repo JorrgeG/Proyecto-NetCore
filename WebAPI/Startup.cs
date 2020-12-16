@@ -10,6 +10,7 @@ using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using Persistencia;
 using Seguridad;
 using WebAPI.Middleware;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebAPI
 {
@@ -46,7 +48,12 @@ namespace WebAPI
             });
 
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
-            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
+            services.AddControllers(opt =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));//Pide autorizacion antes del request del cliente
+            })
+            .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Nuevo>());
             var builder = services.AddIdentityCore<Usuario>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<CursoOnlineContext>();
