@@ -15,5 +15,10 @@ namespace WebAPI.Controllers
         {
             return await Mediator.Send(parametros);
         }
+        [HttpPost("registrar")]
+        public async Task<ActionResult<UsuarioData>> Registrar(Registrar.Ejecuta parametros)
+        {
+            return await Mediator.Send(parametros);
+        }
     }
 }
