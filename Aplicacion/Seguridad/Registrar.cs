@@ -42,9 +42,9 @@ namespace Aplicacion.Seguridad
 
         public class Mnejador : IRequestHandler<Ejecuta, UsuarioData>
         {
-            CursoOnlineContext _context;
-            UserManager<Usuario> _userManager;
-            IJwtGenerador _jwtGenerador;
+            private readonly CursoOnlineContext _context;
+            private readonly UserManager<Usuario> _userManager;
+            private readonly IJwtGenerador _jwtGenerador;
             public Mnejador(CursoOnlineContext context, UserManager<Usuario> userManager, IJwtGenerador jwtGenerador)
             {
                 _context = context;

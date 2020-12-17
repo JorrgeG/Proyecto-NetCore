@@ -20,5 +20,11 @@ namespace WebAPI.Controllers
         {
             return await Mediator.Send(parametros);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<UsuarioData>> DevovlerUsuario()
+        {
+            return await Mediator.Send(new UsuarioActual.Ejecutar());
+        }
     }
 }
