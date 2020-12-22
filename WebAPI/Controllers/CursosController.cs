@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class CursosController : MiControllerBase
     {
-        [HttpGet]
+        [HttpGet(Name = "getcurse")]
         public async Task<ActionResult<List<Curso>>> Get()
         {
             return await Mediator.Send(new Consulta.ListaCursos());

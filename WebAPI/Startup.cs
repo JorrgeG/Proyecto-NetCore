@@ -27,6 +27,11 @@ using Persistencia;
 using Seguridad;
 using WebAPI.Middleware;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using RiskFirst.Hateoas;
+using Aplicacion.Modelos;
+using WebAPI.Controllers;
+using HateoasNet.DependencyInjection.Core;
+using Aplicacion.Seguridad;
 
 namespace WebAPI
 {
@@ -60,17 +65,35 @@ namespace WebAPI
             identityBuilder.AddSignInManager<SignInManager<Usuario>>();
             services.TryAddSingleton<ISystemClock, SystemClock>();
 
+            services.ConfigureHateoas(context =>
+    {
+        return context.Configure<List<UsuarioData>>(members =>
+        {
+            members.AddLink("get-members");
+        });
+    });
+
+            services.AddLinks(config =>
+            {
+                config.AddPolicy<ItemHateoasReponse>(policy =>
+                {
+                    policy.RequireRoutedLink("dfdf" + nameof(UsuarioController.DevovlerUsuario),
+                                                nameof(UsuarioController.DevovlerUsuario), _ => new { id = _.Data });
+
+                });
+            });
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Mi palabra secreta"));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateAudience = false, //Quien puede crear la clave
-                    ValidateIssuer = false
-                };
-            });
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false, //Quien puede crear la clave
+                        ValidateIssuer = false
+                    };
+                });
 
             services.AddScoped<IJwtGenerador, JwtGenerator>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();

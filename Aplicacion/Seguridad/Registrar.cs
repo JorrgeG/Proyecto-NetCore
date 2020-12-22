@@ -23,6 +23,7 @@ namespace Aplicacion.Seguridad
             public string Email { get; set; }
             public string Password { get; set; }
             public string UserName { get; set; }
+            public Direccion Direccion { get; set; }
         }
 
         public class EjecutaValidador : AbstractValidator<Ejecuta>
@@ -68,7 +69,9 @@ namespace Aplicacion.Seguridad
                 {
                     NombreCompleto = request.Nombre + " " + request.Apellido,
                     Email = request.Email,
-                    UserName = request.UserName
+                    UserName = request.UserName,
+                    Barrio = request.Direccion.Barrio,
+                    DireccionCasa = request.Direccion.DireccionCasa
                 };
 
                 //Metodo para inserter 
@@ -80,11 +83,14 @@ namespace Aplicacion.Seguridad
                         NombreCompleto = usuario.NombreCompleto,
                         Token = _jwtGenerador.CrearToken(usuario),
                         UserName = usuario.UserName,
-                        Email = usuario.Email
+                        Email = usuario.Email,
+                        Direccion = new Direccion { Barrio = request.Direccion.Barrio, DireccionCasa = request.Direccion.DireccionCasa }
                     };
                 }
                 throw new Exception("No se pudo agregar al nuevo usuario");
             }
         }
     }
+
+
 }

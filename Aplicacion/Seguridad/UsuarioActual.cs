@@ -31,7 +31,8 @@ namespace Aplicacion.Seguridad
                     UserName = usurario.UserName,
                     Token = _jwtGenerador.CrearToken(usurario),
                     Imagen = null,
-                    Email = usurario.Email
+                    Email = usurario.Email,
+                    Direccion = new Direccion { Barrio = usurario.Barrio, DireccionCasa = usurario.DireccionCasa }
                 };
             }
         }
