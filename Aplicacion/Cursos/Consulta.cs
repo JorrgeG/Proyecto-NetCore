@@ -10,13 +10,13 @@ namespace Aplicacion.Cursos
 {
     public class Consulta
     {
-        public class ListaCursos : IRequest<List<Curso>>
+        public class ListaCursos : IRequest<List<CursoDto>>
         {
 
         }
 
         //HANDLER
-        public class Manejador : IRequestHandler<ListaCursos, List<Curso>>
+        public class Manejador : IRequestHandler<ListaCursos, List<CursoDto>>
         {
             private readonly CursoOnlineContext _context;
             public Manejador(CursoOnlineContext context)
@@ -26,7 +26,7 @@ namespace Aplicacion.Cursos
 
             public async Task<List<Curso>> Handle(ListaCursos request, CancellationToken cancellationToken)
             {
-                var curso = await _context.Curso.ToListAsync();
+                var curso = await _context.Curso.Include(x => x.InstructorsLink).ThenInclude(x => x.Instructor).ToListAsync();
                 return curso;
             }
         }

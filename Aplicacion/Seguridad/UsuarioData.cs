@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Aplicacion.Modelos;
+using RiskFirst.Hateoas.Models;
 
 namespace Aplicacion.Seguridad
 {
-    public class UsuarioData
+    public class UsuarioData : LinkContainer
     {
         public string NombreCompleto { get; set; }
         public string Token { get; set; }
@@ -11,7 +12,6 @@ namespace Aplicacion.Seguridad
         public string UserName { get; set; }
         public string Imagen { get; set; }
         public Direccion Direccion { get; set; }
-        public List<LinksGetCurse> Links { get; set; } = new List<LinksGetCurse>();
     }
     public class Direccion
     {

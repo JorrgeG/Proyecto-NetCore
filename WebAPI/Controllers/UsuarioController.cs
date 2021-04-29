@@ -32,6 +32,7 @@ namespace WebAPI.Controllers
             return await Mediator.Send(parametros);
         }
 
+        [Links(Policy = "FullInfoPolicy")]
         [HttpGet(Name = "DevovlerUsuario")]
         public async Task<ActionResult<UsuarioData>> DevovlerUsuario()
         {

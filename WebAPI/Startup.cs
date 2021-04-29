@@ -70,15 +70,19 @@ namespace WebAPI
         return context.Configure<List<UsuarioData>>(members =>
         {
             members.AddLink("get-members");
+            members.AddLink("DevovlerUsuario");
+
         });
     });
 
             services.AddLinks(config =>
             {
-                config.AddPolicy<ItemHateoasReponse>(policy =>
+                config.AddPolicy<UsuarioData>("FullInfoPolicy", policy =>
                 {
-                    policy.RequireRoutedLink("dfdf" + nameof(UsuarioController.DevovlerUsuario),
-                                                nameof(UsuarioController.DevovlerUsuario), _ => new { id = _.Data });
+                    policy.RequireSelfLink()
+                    .RequireRoutedLink("seddlf", "DevovlerUsuario", _ => new { id = _.Direccion.Barrio })
+                    .RequireRoutedLink("next", "get-members", _ => new { id = _.Direccion.DireccionCasa })
+                    .RequireRoutedLink("previous", "get-members", _ => new { id = _.Direccion });
 
                 });
             });
