@@ -32,6 +32,7 @@ using Aplicacion.Modelos;
 using WebAPI.Controllers;
 using HateoasNet.DependencyInjection.Core;
 using Aplicacion.Seguridad;
+using AutoMapper;
 
 namespace WebAPI
 {
@@ -101,6 +102,7 @@ namespace WebAPI
 
             services.AddScoped<IJwtGenerador, JwtGenerator>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+            services.AddAutoMapper(typeof(Consulta.Manejador));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

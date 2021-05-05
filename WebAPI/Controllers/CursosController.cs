@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Aplicacion.Cursos;
@@ -14,7 +15,7 @@ namespace WebAPI.Controllers
     public class CursosController : MiControllerBase
     {
         [HttpGet(Name = "getcurse")]
-        public async Task<ActionResult<List<Curso>>> Get()
+        public async Task<ActionResult<List<CursoDto>>> Get()
         {
             return await Mediator.Send(new Consulta.ListaCursos());
         }
@@ -22,7 +23,7 @@ namespace WebAPI.Controllers
         // http://localhost:5000/api/Cursos/{id}
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Curso>> Detalle(int id)
+        public async Task<ActionResult<CursoDto>> Detalle(Guid id)
         {
             return await Mediator.Send(new ConsultaId.CursoUnico { Id = id });
         }
