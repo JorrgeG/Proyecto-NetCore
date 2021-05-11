@@ -30,7 +30,10 @@ namespace Aplicacion.Cursos
             }
             public async Task<CursoDto> Handle(CursoUnico request, CancellationToken cancellationToken)
             {
-                var curso = await _context.Curso.Include(x => x.InstructorsLink).ThenInclude(y => y.Instructor).FirstOrDefaultAsync(a => a.CursoId == request.Id);
+                var curso = await _context.Curso
+                .Include(x => x.ComentarioLista)
+                .Include(x => x.PrecioPromocion)
+                .Include(x => x.InstructorsLink).ThenInclude(y => y.Instructor).FirstOrDefaultAsync(a => a.CursoId == request.Id);
                 if (curso == null)
                 {
                     //throw new Exception("No se puede eliminar");

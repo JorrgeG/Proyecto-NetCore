@@ -14,5 +14,8 @@ namespace Aplicacion.Cursos
         public Precio PrecioPromocion { get; set; }
 
         public ICollection<InstructorDto> Instructores { get; set; }
+
+        public PrecioDto Precio { get; set; }
+        public ICollection<ComentarioDto> Comentarios { get; set; }
     }
 }
