@@ -31,6 +31,20 @@ namespace Aplicacion.Cursos
                 {
                     _context.CursoInstructor.Remove(instructor);
                 }
+
+                //obtener los comnetarios de la bd para eliminarnos
+                var comentariosbd = _context.Comentario.Where(x => x.CursoId == request.Id);
+                foreach (var cmt in comentariosbd)
+                {
+                    _context.Comentario.Remove(cmt);
+                }
+                var precioDB = _context.Precio.Where(x => x.CursoId == request.Id).FirstOrDefault();
+                if (precioDB != null)
+                {
+                    _context.Precio.Remove(precioDB);
+                }
+
+
                 var curso = await _context.Curso.FindAsync(request.Id);
                 if (curso == null)
                 {
