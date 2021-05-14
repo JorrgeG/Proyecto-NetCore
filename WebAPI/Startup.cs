@@ -33,6 +33,7 @@ using WebAPI.Controllers;
 using HateoasNet.DependencyInjection.Core;
 using Aplicacion.Seguridad;
 using AutoMapper;
+using Persistencia.DapperConexion;
 
 namespace WebAPI
 {
@@ -52,6 +53,8 @@ namespace WebAPI
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.Configure<ConexionConfiguracion>(Configuration.GetSection("DefaultConnection"));
 
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
             services.AddControllers(opt =>
