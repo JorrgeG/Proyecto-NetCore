@@ -34,6 +34,7 @@ using HateoasNet.DependencyInjection.Core;
 using Aplicacion.Seguridad;
 using AutoMapper;
 using Persistencia.DapperConexion;
+using Persistencia.DapperConexion.Instructor;
 
 namespace WebAPI
 {
@@ -54,7 +55,8 @@ namespace WebAPI
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.Configure<ConexionConfiguracion>(Configuration.GetSection("DefaultConnection"));
+            services.Configure<ConexionConfiguracion>(Configuration.GetSection("ConnectionStrings"));
+            services.AddOptions();
 
             services.AddMediatR(typeof(Consulta.Manejador).Assembly);
             services.AddControllers(opt =>
@@ -70,14 +72,14 @@ namespace WebAPI
             services.TryAddSingleton<ISystemClock, SystemClock>();
 
             services.ConfigureHateoas(context =>
-    {
-        return context.Configure<List<UsuarioData>>(members =>
-        {
-            members.AddLink("get-members");
-            members.AddLink("DevovlerUsuario");
+            {
+                return context.Configure<List<UsuarioData>>(members =>
+                {
+                    members.AddLink("get-members");
+                    members.AddLink("DevovlerUsuario");
 
-        });
-    });
+                });
+            });
 
             services.AddLinks(config =>
             {
@@ -104,12 +106,15 @@ namespace WebAPI
                 });
 
             services.AddControllers().AddNewtonsoftJson(options =>
-options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    );
 
             services.AddScoped<IJwtGenerador, JwtGenerator>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
+            services.AddScoped<IInstructor, InstructorRepositorio>();
+
             services.AddAutoMapper(typeof(Consulta.Manejador));
+            services.AddTransient<IFactoryConnection, FactoryConnection>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
