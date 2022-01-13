@@ -39,9 +39,27 @@ namespace Persistencia.DapperConexion.Instructor
             }
         }
 
-        public Task<int> Eliminar(Guid id)
+        public async Task<int> Eliminar(Guid id)
         {
-            throw new NotImplementedException();
+            var storeProcedure = "usp_instructor_eliminar";
+            try
+            {
+                var connection = _factoryConnection.GetConnection();
+                var result = await connection.ExecuteAsync(
+                    storeProcedure,
+                    new
+                    {
+                        InstructorId = id
+                    },
+                    commandType: CommandType.StoredProcedure
+                );
+                _factoryConnection.CloseConnection();
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                throw new Exception("No se puedo eliminar el instructor " + e.Message);
+            }
         }
 
         public async Task<int> Nuevo(string nombre, string apellido, string titulo)
@@ -68,9 +86,28 @@ namespace Persistencia.DapperConexion.Instructor
             }
         }
 
-        public Task<InstructorModel> ObtenerInstructorPorId(Guid id)
+        public async Task<InstructorModel> ObtenerInstructorPorId(Guid id)
         {
-            throw new NotImplementedException();
+            var storeProcedure = "usp_obtener_instructor_por_id";
+            InstructorModel instructorList = null;
+            try
+            {
+                var connection = _factoryConnection.GetConnection();
+                instructorList = await connection.QueryFirstAsync<InstructorModel>(
+                    storeProcedure,
+                    new
+                    {
+                        Id = id
+                    },
+                    commandType: CommandType.StoredProcedure
+                );
+                _factoryConnection.CloseConnection();
+                return instructorList;
+            }
+            catch (System.Exception e)
+            {
+                throw new Exception("No se puedo eliminar el instructor " + e.Message);
+            }
         }
 
         public async Task<IEnumerable<InstructorModel>> ObtenerLista()
