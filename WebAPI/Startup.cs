@@ -36,6 +36,7 @@ using AutoMapper;
 using Persistencia.DapperConexion;
 using Persistencia.DapperConexion.Instructor;
 using Microsoft.OpenApi.Models;
+using Persistencia.DapperConexion.Paginacion;
 
 namespace WebAPI
 {
@@ -113,6 +114,7 @@ namespace WebAPI
             services.AddScoped<IJwtGenerador, JwtGenerator>();
             services.AddScoped<IUsuarioSesion, UsuarioSesion>();
             services.AddScoped<IInstructor, InstructorRepositorio>();
+            services.AddScoped<IPaginacion, PaginacionRepositorio>();
 
             services.AddAutoMapper(typeof(Consulta.Manejador));
             services.AddTransient<IFactoryConnection, FactoryConnection>();

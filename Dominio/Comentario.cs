@@ -11,7 +11,7 @@ namespace Dominio
         public Guid CursoId { get; set; }
 
         //COMANDO PARA MIGRACION: dontnet ef migrations add AgregarColumnasFecha -p .\Persistencia\ -s .\WebAPI\
-        public DateTime? FechaCreacion { get; set; }
+        //public DateTime? FechaCreacion { get; set; }
 
         public Curso Curso { get; set; }
     }
