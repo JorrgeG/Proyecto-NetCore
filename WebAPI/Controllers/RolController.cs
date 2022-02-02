@@ -26,5 +26,11 @@ namespace WebAPI.Controllers
         {
             return await Mediator.Send(new RolLista.Ejecuta());
         }
+
+        [HttpPost("agregarRoleUsuario")]
+        public async Task<ActionResult<Unit>> AgregarRolUser(UsuarioRolAgregar.Ejecuta parametros)
+        {
+            return await Mediator.Send(parametros);
+        }
     }
 }
